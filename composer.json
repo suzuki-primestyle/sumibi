@@ -1,0 +1,26 @@
+{
+  "name": "suzuki-primestyle/sumibi",
+  "description": "Validator for Japanese special field.",
+  "authors": [
+    {
+      "name": "ryosuke suzuki",
+      "email": "suzuki@primestyle.co.jp"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Primestyle\\Sumibi\\": "src/Sumibi"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Primestyle\\Sumibi\\Test\\": "tests"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.1"
+  },
+  "require": {
+    "myclabs/php-enum": "^1.6"
+  }
+}
