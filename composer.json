@@ -21,6 +21,7 @@
     "phpunit/phpunit": "^8.1"
   },
   "require": {
+    "php": "^7.1.*",
     "myclabs/php-enum": "^1.6"
   }
 }
