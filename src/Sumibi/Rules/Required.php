@@ -2,8 +2,11 @@
 
 namespace Primestyle\Sumibi\Rules;
 
+use Primestyle\Sumibi\Traits\FailedTrait;
+
 class Required
 {
+    use FailedTrait;
     /**
      * check if a value is not empty.
      *
@@ -17,9 +20,5 @@ class Required
         if (is_iterable($value) && count($value) === 0 ) return false;
 
         return true;
-    }
-    public function failed($value): bool
-    {
-        return !$this->valid($value);
     }
 }

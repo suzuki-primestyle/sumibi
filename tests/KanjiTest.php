@@ -26,4 +26,13 @@ class KanjiTest extends TestCase
 
         $this->assertEquals(count($result->toArray()['name']), 1);
     }
+    public function testKanjiWithRepeateLetter()
+    {
+        $v = new Sumibi();
+        $data = ['name' => '佐々木太郎'];
+        $rules = ['name' => 'kanji'];
+        $result = $v->validate($data, $rules);
+
+        $this->assertEquals(count($result->toArray()['name']), 0);
+    }
 }

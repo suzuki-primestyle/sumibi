@@ -9,9 +9,11 @@ use Primestyle\Sumibi\Rules\{
     Required,
     Kanji,
 };
+use Primestyle\Sumibi\Utils;
 
 class Sumibi
 {
+    private $error_dictionary;
     /**
      * hold error messages
      *
@@ -19,45 +21,48 @@ class Sumibi
      */
     private $message_bag;
 
-    public function __construct(MessageBag $message_bag = null)
+    public function __construct(array $error_dictionary = null, MessageBag $message_bag = null)
     {
         $this->message_bag = $message_bag ?? new MessageBag();
+        $this->error_dictionary = $error_dictionary;
     }
     public function validate(array $data, array $rules): MessageBag
     {
         foreach ($data as $key => $value) {
-            $messages = $this->validateItem($value, $rules[$key]);
+            $messages = $this->validateField($value, $rules[$key]);
             $this->message_bag->addMessagesToKey($key, $messages);
         }
         return $this->message_bag;
     }
-    public function validateItem($value, $rules_for_item): array
+    private function validateField($value, $rules_for_field): array
     {
         $messages = [];
-        $rules = $this->splitRules($rules_for_item);
+        $rules = $this->splitRules($rules_for_field);
         foreach ($rules as $rule) {
-            switch ($rule) {
-                case Rulenames::REQUIRED():
-                    if ((new Required())->failed($value)) {
-                        $messages[] = 'must be required';
-                    }
-                    break;
-                case Rulenames::FULL_NAME_KATAKANA():
-                    if ((new FullNameKatakana())->failed($value)) {
-                        $messages[] = 'must be katakana name';
-                    }
-                    break;
-                case Rulenames::KANJI():
-                    if((new Kanji)->failed($value)) {
-                        $messages[] = 'must be kanji';
-                    }
-                    break;
-                default: {
-                    break;
-                }
+            $validator = $this->getValidatorForRule($rule);
+            if ($validator->failed($value)) {
+                $messages[] = (new Utils())->getMessage($rule, $this->error_dictionary);
             }
         }
         return $messages;
+    }
+    private function getValidatorForRule($rule)
+    {
+        switch ($rule) {
+            case Rulenames::REQUIRED():
+                return new Required();
+                break;
+            case Rulenames::FULL_NAME_KATAKANA():
+                return new FullNameKatakana();
+                break;
+            case Rulenames::KANJI():
+                return new Kanji();
+                break;
+            default: {
+                throw new \Exception("You call undefined rule name '".$rule."'.");
+                break;
+            }
+        }
     }
     private function splitRules(string $rules): array
     {

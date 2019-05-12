@@ -1,0 +1,4 @@
+required: "This field is required."
+full_name_katakana: "This field must be Katakana."
+kanji: "This field must be Kanji."
+

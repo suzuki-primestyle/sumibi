@@ -16,6 +16,7 @@ class RequiredTest extends TestCase
         $result = $v->validate($data, $rules);
 
         $this->assertEquals(count($result->toArray()['name']), 1);
+        $this->assertEquals($result->toArray()['name'][0], 'This field is required.');
     }
     public function testEmptyStringValue()
     {
